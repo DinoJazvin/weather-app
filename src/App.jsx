@@ -20,7 +20,7 @@ function App() {
       const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=${weatherApiKey}&q=${city}`)
       if(!response.ok) throw new Error("City not found")
       const data = await response.json()
-      // console.log(data)
+      console.log(data.current.condition.text)
       setWeatherData(data)
       setBackgoundImage(data.location.name)
       } catch (error) {
@@ -47,17 +47,23 @@ function App() {
   } 
 
   useEffect(() => {
-    document.body.style.backgroundImage = `url(${bgImage})`
+    if(!bgImage) return
+    // document.body.style.backgroundImage = `url(${bgImage})`
+    document.body.style.backgroundImage = `linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.8) 60%, rgba(0, 0, 0, 0) 87%), url(${bgImage})`
     document.body.style.backgroundRepeat = "no-repeat"
     document.body.style.backgroundSize = 'cover'
     document.body.style.backgroundPosition = 'center'
+
   }, [bgImage])
   
   return (
-    <div className='main-container'>
-      <h1>Weather App</h1>
-      <input placeholder='Enter City...' onChange={(e)=> getCity(e)}></input>
-      <button onClick={() => getWeatherData()}>Show weather</button>
+    <div>
+      <div className='main-container glassmorphism'>
+        <h1>Weather App</h1>
+        <input placeholder='Enter City...' onChange={(e)=> getCity(e)}></input>
+        <button onClick={() => getWeatherData()}>Show weather</button>
+        
+      </div>
       <WeatherDisplay weatherData={weatherData}/>
     </div>
   )
